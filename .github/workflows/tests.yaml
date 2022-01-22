@@ -44,13 +44,13 @@ jobs:
     name: HACS
     steps:
       - name: Check out the repository
-        uses: "actions/checkout@v2.4.0"
+        uses: "actions/checkout@v2"
 
       - name: HACS validation
-        uses: "hacs/action@21.12.1"
+        uses: "hacs/action@main"
         with:
           category: "integration"
-          ignore: brands hacs
+          ignore: brands
 
   hassfest:
     runs-on: "ubuntu-latest"

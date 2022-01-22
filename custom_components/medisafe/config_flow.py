@@ -13,14 +13,13 @@
 
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import MedisafeApiClient
 from .const import CONF_PASSWORD
 from .const import CONF_USERNAME
 from .const import DOMAIN
-from .const import PLATFORMS
+
 
 class MedisafeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for medisafe."""

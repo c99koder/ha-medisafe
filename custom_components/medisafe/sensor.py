@@ -16,14 +16,15 @@ from homeassistant.components.sensor import SensorStateClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN, CONF_USERNAME, ATTRIBUTION
 
+
 async def async_setup_entry(hass, entry, async_add_devices):
     coordinator = hass.data[DOMAIN][entry.entry_id]
     await coordinator.async_config_entry_first_refresh()
 
     entities = []
 
-    for idx, ent in enumerate(coordinator.data['medications']):
-        if ent['treatmentStatus'] == 1:
+    for idx, ent in enumerate(coordinator.data["medications"]):
+        if ent["treatmentStatus"] == 1:
             entities.append(MedisafeMedicationEntity(coordinator, entry, idx))
 
     entities.append(MedisafeStatusCountEntity(coordinator, entry, "taken"))
@@ -49,8 +50,11 @@ class MedisafeStatusCountEntity(CoordinatorEntity):
     @property
     def state(self):
         count = 0
-        for item in self.coordinator.data['items']:
-            if item['status'] == self.status and date.fromtimestamp(item['date']) == date.today():
+        for item in self.coordinator.data["items"]:
+            if (
+                item["status"] == self.status
+                and date.fromtimestamp(item["date"]) == date.today()
+            ):
                 count = count + 1
         return count
 
@@ -62,6 +66,7 @@ class MedisafeStatusCountEntity(CoordinatorEntity):
             "integration": DOMAIN,
         }
 
+
 class MedisafeMedicationEntity(CoordinatorEntity):
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_device_class = "medication"
@@ -72,20 +77,20 @@ class MedisafeMedicationEntity(CoordinatorEntity):
         self.idx = idx
         self.config_entry = config_entry
         self._attr_unique_id = f"medication_{self.config_entry.entry_id}_{self.coordinator.data['medications'][self.idx]['uuid']}"
-        self._attr_name = self.coordinator.data['medications'][self.idx]['name']
+        self._attr_name = self.coordinator.data["medications"][self.idx]["name"]
 
     @property
     def state(self):
-        return self.coordinator.data['medications'][self.idx]['pillsLeft']
+        return self.coordinator.data["medications"][self.idx]["pillsLeft"]
 
     @property
     def extra_state_attributes(self):
-        if 'dose' in self.coordinator.data['medications'][self.idx]:
+        if "dose" in self.coordinator.data["medications"][self.idx]:
             return {
                 "account": self.config_entry.data.get(CONF_USERNAME),
                 "attribution": ATTRIBUTION,
                 "integration": DOMAIN,
-                "dose": self.coordinator.data['medications'][self.idx]['dose']
+                "dose": self.coordinator.data["medications"][self.idx]["dose"],
             }
         else:
             return {
@@ -93,7 +98,7 @@ class MedisafeMedicationEntity(CoordinatorEntity):
                 "attribution": ATTRIBUTION,
                 "integration": DOMAIN,
             }
-        
+
     @property
     def entity_picture(self):
         return f"https://web.medisafe.com/medication-icons/pill_{self.coordinator.data['medications'][self.idx]['shape']}_{self.coordinator.data['medications'][self.idx]['color']}.png"

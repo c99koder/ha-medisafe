@@ -24,6 +24,7 @@ TIMEOUT = 10
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
+
 class MedisafeApiClient:
     def __init__(
         self, username: str, password: str, session: aiohttp.ClientSession
@@ -33,16 +34,24 @@ class MedisafeApiClient:
         self._session = session
 
     async def async_get_data(self) -> dict:
-        auth = await self.api_wrapper("post", "https://web.medisafe.com/api/auth", {"username": self._username, "password": self._password})
-        if 'error' in auth:
-            raise Exception(auth['error']['message'])
+        auth = await self.api_wrapper(
+            "post",
+            "https://web.medisafe.com/api/auth",
+            {"username": self._username, "password": self._password},
+        )
+        if "error" in auth:
+            raise Exception(auth["error"]["message"])
 
-        if not 'token' in auth:
+        if "token" not in auth:
             raise Exception("Authentication Failed")
 
         start = int((datetime.today() - timedelta(days=1)).timestamp() * 1000)
         end = int((datetime.today() + timedelta(days=1)).timestamp() * 1000)
-        return await self.api_wrapper("get", f"https://web.medisafe.com/api/sync/{start}/{end}?id={auth['id']}", headers={'Authorization':'Bearer ' + auth['token']})
+        return await self.api_wrapper(
+            "get",
+            f"https://web.medisafe.com/api/sync/{start}/{end}?id={auth['id']}",
+            headers={"Authorization": "Bearer " + auth["token"]},
+        )
 
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}

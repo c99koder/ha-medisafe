@@ -14,16 +14,15 @@
 import asyncio
 import logging
 import socket
+from datetime import datetime
+from datetime import timedelta
 
 import aiohttp
 import async_timeout
 
-from datetime import datetime, timedelta
-
 TIMEOUT = 10
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
-
 
 class MedisafeApiClient:
     def __init__(

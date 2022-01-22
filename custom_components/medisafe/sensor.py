@@ -14,8 +14,9 @@
 from datetime import date
 from homeassistant.components.sensor import SensorStateClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from .const import DOMAIN, CONF_USERNAME, ATTRIBUTION
-
+from .const import ATTRIBUTION
+from .const import CONF_USERNAME
+from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_devices):
     coordinator = hass.data[DOMAIN][entry.entry_id]

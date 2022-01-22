@@ -1,0 +1,17 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Medisafe",
+        "description": "If you need help with the configuration have a look here: https://github.com/c99koder/ha-medisafe",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "auth": "Username/Password is wrong."
+    }
+  }
+}

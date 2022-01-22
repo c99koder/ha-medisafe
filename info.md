@@ -47,6 +47,7 @@ filter:
         integration: medisafe
       options:
         type: custom:template-entity-row
+        state: '{{ states(config.entity) }} {{ state_attr(config.entity, ''unit_of_measurement'') }}'
         secondary: '{{ state_attr(config.entity, ''dose'') }}'
   exclude:
     - entity_id: sensor.medication_*

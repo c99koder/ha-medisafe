@@ -10,7 +10,7 @@
 [![hacs][hacsbadge]][hacs]
 [![Project Maintenance][maintenance-shield]][user_profile]
 
-View your medication from [Medisafe Cloud](https://www.medisafe.com/) in [Home Assistant](https://www.home-assistant.io/).  
+View your medication from [Medisafe Cloud](https://www.medisafe.com/) in [Home Assistant](https://www.home-assistant.io/).
 This integration adds sensors for today's upcoming, taken, skipped, and missed doses, plus sensors for each medication's remaining pills.
 
 ![example][exampleimg]
@@ -18,12 +18,14 @@ This integration adds sensors for today's upcoming, taken, skipped, and missed d
 ## Installation
 
 ### Install with HACS (recommended)
+
 1. Add `https://github.com/c99koder/ha-medisafe` as a custom repository as Type: `Integration`
 2. Click install under "Medisafe" in the Integration tab
 3. Restart Home Assistant
 4. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Medisafe"
 
 ### Install manually
+
 1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
 2. If you do not have a `custom_components` directory (folder) there, you need to create it.
 3. In the `custom_components` directory (folder) create a new folder called `medisafe`.

@@ -10,7 +10,6 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
 import asyncio
 import logging
 import socket
@@ -23,6 +22,7 @@ import async_timeout
 TIMEOUT = 10
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
 
 class MedisafeApiClient:
     def __init__(

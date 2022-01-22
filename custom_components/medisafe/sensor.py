@@ -10,13 +10,15 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
 from datetime import date
+
 from homeassistant.components.sensor import SensorStateClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+
 from .const import ATTRIBUTION
 from .const import CONF_USERNAME
 from .const import DOMAIN
+
 
 async def async_setup_entry(hass, entry, async_add_devices):
     coordinator = hass.data[DOMAIN][entry.entry_id]

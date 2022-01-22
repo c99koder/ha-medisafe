@@ -5,7 +5,7 @@
 [![hacs][hacsbadge]][hacs]
 [![Project Maintenance][maintenance-shield]][user_profile]
 
-View your medication from [Medisafe Cloud](https://www.medisafe.com/) in Home Assistant.  
+View your medication from [Medisafe Cloud](https://www.medisafe.com/) in Home Assistant.
 This integration adds sensors for today's upcoming, taken, skipped, and missed doses, plus sensors for each medication's remaining pills.
 
 ![example][exampleimg]

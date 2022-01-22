@@ -62,7 +62,8 @@ cards:
     name: Missed
   - type: entity
     entity: sensor.medication_dismissed
-    name: Skipped```
+    name: Skipped
+```
 
 ```yaml
 type: custom:auto-entities
@@ -80,7 +81,8 @@ sort:
   numeric: true
 card:
   type: entities
-  title: Remaining Medication```
+  title: Remaining Medication
+```
 
 ## Contributions are welcome!
 

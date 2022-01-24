@@ -23,7 +23,7 @@ This integration adds sensors for today's upcoming, taken, skipped, and missed d
 
 Data is updated every 15 minutes, which can be adjusted by changing `SCAN_INTERVAL` in `__init__.py`.
 
-The sample card above was built using [template-entity-row](https://github.com/thomasloven/lovelace-template-entity-row) and [auto-entities](https://github.com/thomasloven/lovelace-auto-entities):
+The sample card above was built using [auto-entities](https://github.com/thomasloven/lovelace-auto-entities):
 
 ```yaml
 type: horizontal-stack
@@ -45,18 +45,15 @@ filter:
   include:
     - attributes:
         integration: medisafe
-      options:
-        type: custom:template-entity-row
-        state: "{{ states(config.entity) }} {{ state_attr(config.entity, 'unit_of_measurement') }}"
-        secondary: "{{ state_attr(config.entity, 'dose') }}"
   exclude:
     - entity_id: sensor.medication_*
 sort:
   method: state
   numeric: true
 card:
-  type: entities
+  type: glance
   title: Remaining Medication
+  columns: 4
 ```
 
 ## Credits

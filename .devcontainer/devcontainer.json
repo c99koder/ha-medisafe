@@ -3,8 +3,13 @@
   "image": "ludeeus/container:integration-debian",
   "name": "Medisafe integration development",
   "context": "..",
-  "appPort": ["9123:8123"],
+  "appPort": [
+    "9123:8123"
+  ],
   "postCreateCommand": "container install",
+  "onCreateCommand": "mkdir -p /root/.homeassistant",
+  "updateContentCommand": "ln -s /workspaces/ha-medisafe/custom_components /root/.homeassistant/custom_components",
+  "postStartCommand": "apt update; apt install libpcap-dev",
   "extensions": [
     "ms-python.python",
     "github.vscode-pull-request-github",

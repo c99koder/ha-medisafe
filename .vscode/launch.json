@@ -3,6 +3,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "command": "/usr/local/bin/hass",
+      "name": "Run Home Assistant",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
       // Example of attaching to local debug server
       "name": "Python: Attach Local",
       "type": "python",

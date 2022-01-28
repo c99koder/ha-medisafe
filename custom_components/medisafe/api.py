@@ -56,7 +56,7 @@ class MedisafeApiClient:
         self, method: str, url: str, data: dict = {}, headers: dict = {}
     ) -> dict:
         try:
-            async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
+            async with async_timeout.timeout(TIMEOUT):
                 if method == "get":
                     response = await self._session.get(url, headers=headers)
                     return await response.json()

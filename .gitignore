@@ -6,4 +6,3 @@ venv
 .venv
 .DS_Store
 .devcontainer/homeassistant/
-custom_components/custom_components

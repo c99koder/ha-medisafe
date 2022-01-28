@@ -16,7 +16,9 @@
     "ms-python.vscode-pylance"
   ],
   "mounts": [
-    "source=${localWorkspaceFolder}/.devcontainer/homeassistant,target=/root/.homeassistant,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder}/.devcontainer/homeassistant,target=/root/.homeassistant,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gnupg,target=/root/.gnupg,type=bind,consistency=cached"
   ],
   "settings": {
     "files.eol": "\n",

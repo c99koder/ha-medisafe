@@ -73,11 +73,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 class MedisafeDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(
-        self,
-        hass: HomeAssistant,
-        client: MedisafeApiClient,
-    ) -> None:
+    def __init__(self, hass: HomeAssistant, client: MedisafeApiClient) -> None:
         """Initialize."""
         self.api = client
         self.platforms = []

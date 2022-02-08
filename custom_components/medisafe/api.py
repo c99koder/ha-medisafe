@@ -53,7 +53,7 @@ class MedisafeApiClient:
         )
 
     async def api_wrapper(
-        self, method: str, url: str, data: dict = {}, headers: dict = {}
+        self, method: str, url: str, data: dict = None, headers: dict = None
     ) -> dict:
         try:
             async with async_timeout.timeout(TIMEOUT):
@@ -67,22 +67,12 @@ class MedisafeApiClient:
 
         except asyncio.TimeoutError as exception:
             _LOGGER.error(
-                "Timeout error fetching information from %s - %s",
-                url,
-                exception,
+                "Timeout error fetching information from %s - %s", url, exception
             )
 
         except (KeyError, TypeError) as exception:
-            _LOGGER.error(
-                "Error parsing information from %s - %s",
-                url,
-                exception,
-            )
+            _LOGGER.error("Error parsing information from %s - %s", url, exception)
         except (aiohttp.ClientError, socket.gaierror) as exception:
-            _LOGGER.error(
-                "Error fetching information from %s - %s",
-                url,
-                exception,
-            )
+            _LOGGER.error("Error fetching information from %s - %s", url, exception)
         except Exception as exception:  # pylint: disable=broad-except
             _LOGGER.error("Something really wrong happened! - %s", exception)

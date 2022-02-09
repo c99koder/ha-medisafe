@@ -19,7 +19,7 @@ from datetime import timedelta
 import aiohttp
 import async_timeout
 
-TIMEOUT = 10
+TIMEOUT = 120
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 

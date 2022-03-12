@@ -69,7 +69,7 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 [commits]: https://github.com/c99koder/ha-medisafe/commits/main
 [hacs]: https://hacs.xyz
 [hacsbadge]: https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge
-[exampleimg]: example.png
+[exampleimg]: https://github.com/c99koder/ha-medisafe/raw/main/example.png
 [license]: https://github.com/c99koder/ha-medisafe/blob/main/LICENSE
 [license-shield]: https://img.shields.io/github/license/c99koder/ha-medisafe.svg?style=for-the-badge
 [maintenance-shield]: https://img.shields.io/badge/maintainer-%40c99koder-blue.svg?style=for-the-badge

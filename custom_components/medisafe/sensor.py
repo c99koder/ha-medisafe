@@ -105,8 +105,8 @@ class MedisafeMedicationEntity(CoordinatorEntity):
 
     @property
     def entity_picture(self):
-        med = self.coordinator.data['medications'][self.idx]
-        if med is None or med['shape'] == 'capsule':
+        med = self.coordinator.data["medications"][self.idx]
+        if med is None or med["shape"] == "capsule":
             return None
         else:
             return f"https://web.medisafe.com/medication-icons/pill_{med['shape']}_{med['color']}.png"

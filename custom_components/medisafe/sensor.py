@@ -74,6 +74,7 @@ class MedisafeMedicationEntity(CoordinatorEntity):
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_device_class = "medication"
     _attr_unit_of_measurement = "pills"
+    _attr_icon = "mdi:pill"
 
     def __init__(self, coordinator, config_entry, idx):
         super().__init__(coordinator)
@@ -104,4 +105,8 @@ class MedisafeMedicationEntity(CoordinatorEntity):
 
     @property
     def entity_picture(self):
-        return f"https://web.medisafe.com/medication-icons/pill_{self.coordinator.data['medications'][self.idx]['shape']}_{self.coordinator.data['medications'][self.idx]['color']}.png"
+        med = self.coordinator.data['medications'][self.idx]
+        if med is None or med['shape'] == 'capsule':
+            return None
+        else:
+            return f"https://web.medisafe.com/medication-icons/pill_{med['shape']}_{med['color']}.png"

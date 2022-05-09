@@ -85,7 +85,17 @@ class MedisafeMedicationEntity(CoordinatorEntity):
 
     @property
     def state(self):
-        return self.coordinator.data["medications"][self.idx]["pillsLeft"]
+        if "pillsLeft" in self.coordinator.data["medications"][self.idx]:
+            return self.coordinator.data["medications"][self.idx]["pillsLeft"]
+        else:
+            return None
+
+    @property
+    def available(self):
+        return (
+            "medications" in self.coordinator.data
+            and "pillsLeft" in self.coordinator.data["medications"][self.idx]
+        )
 
     @property
     def extra_state_attributes(self):

@@ -8,5 +8,5 @@
   "codeowners": ["@c99koder"],
   "iot_class": "cloud_polling",
   "requirements": [],
-  "version": "0.0.2"
+  "version": "0.0.3"
 }

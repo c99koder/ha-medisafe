@@ -12,6 +12,7 @@
 
 View your medication from [Medisafe Cloud](https://www.medisafe.com/) in [Home Assistant](https://www.home-assistant.io/).
 This integration adds sensors for today's upcoming, taken, skipped, and missed doses, plus sensors for each medication's remaining pills.
+The integration also provides a calendar of upcoming events and a to-do list of medication that need to be refilled.
 
 ![example][exampleimg]
 

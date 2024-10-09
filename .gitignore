@@ -6,3 +6,4 @@ venv
 .venv
 .DS_Store
 .devcontainer/homeassistant/
+config/

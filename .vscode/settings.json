@@ -4,5 +4,9 @@
   "python.pythonPath": "/bin/python3",
   "files.associations": {
     "*.yaml": "home-assistant"
-  }
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "python.formatting.provider": "none"
 }

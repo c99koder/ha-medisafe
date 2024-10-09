@@ -83,8 +83,7 @@ class MedisafeDataUpdateCoordinator(DataUpdateCoordinator):
         if "medications" not in self.data:
             _LOGGER.error("Medisafe has no data yet")
             return None
-
-        if "medications" in self.data:
+        else:
             for medication in self.data["medications"]:
                 if medication["uuid"] == uuid:
                     return medication

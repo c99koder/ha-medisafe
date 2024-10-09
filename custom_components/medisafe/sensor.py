@@ -30,15 +30,15 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
     entities = []
 
-    if coordinator.data is not None and "medications" in coordinator.data:
-        _LOGGER.info(f"Got {len(coordinator.data['medications'])} medications")
-        for ent in coordinator.data["medications"]:
-            if "pillsLeft" not in ent:
-                _LOGGER.debug(f"Missing pillsLeft: {ent['name']} with UUID {ent['uuid']}")
-            elif ent["treatmentStatus"] != 1:
-                _LOGGER.debug(f"Inactive medication: {ent['name']} with UUID {ent['uuid']}")
+    if coordinator.data is not None and "groups" in coordinator.data:
+        _LOGGER.info(f"Got {len(coordinator.data['groups'])} medications")
+        for ent in coordinator.data["groups"]:
+            if "refill" not in ent or "currentNumberOfPills" not in ent["refill"]:
+                _LOGGER.debug(f"Missing currentNumberOfPills: {ent['medicine']['name']} with UUID {ent['uuid']}")
+            elif ent["status"] != "ACTIVE":
+                _LOGGER.debug(f"Inactive medication: {ent['medicine']['name']} with UUID {ent['uuid']}")
             else:
-                _LOGGER.debug(f"Adding: {ent['name']} with UUID {ent['uuid']}")
+                _LOGGER.debug(f"Adding: {ent['medicine']['name']} with UUID {ent['uuid']}")
                 entities.append(MedisafeMedicationEntity(coordinator, entry, ent["uuid"]))
 
     entities.append(MedisafeStatusCountEntity(coordinator, entry, "taken"))

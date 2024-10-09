@@ -38,24 +38,24 @@ class MedisafeTodoListEntity(CoordinatorEntity, TodoListEntity):
     def __init__(self, coordinator, config_entry):
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self._attr_unique_id = "medication_refills"
+        self._attr_unique_id = f"medication_refills_{self.config_entry.entry_id}"
 
     @property
     def todo_items(self) -> list[TodoItem]:
         todo_list = []
 
-        if self.coordinator.data is not None and "medications" in self.coordinator.data:
-            for medication in self.coordinator.data["medications"]:
-                if "pillsLeft" in medication and "pillsReminder" in medication and "treatmentStatus" in medication:
-                    if medication["treatmentStatus"] == 1 and medication["pillsLeft"] <= medication["pillsReminder"]:
+        if self.coordinator.data is not None and "groups" in self.coordinator.data:
+            for group in self.coordinator.data["groups"]:
+                if "refill" in group and "refillReminder" in group["refill"] and "status" in group:
+                    if group["status"] == "ACTIVE" and group["refill"]["currentNumberOfPills"] <= group["refill"]["refillReminder"]["pills"]:
                         item = TodoItem()
-                        item.summary = medication["name"]
-                        item.uid = medication["uuid"]
+                        item.summary = group["medicine"]["name"]
+                        item.uid = group["uuid"]
                         item.status = TodoItemStatus.NEEDS_ACTION
-                        if medication['pillsLeft'].is_integer():
-                            item.description = f"{int(medication['pillsLeft'])} pills remaining"
+                        if group["refill"]["currentNumberOfPills"].is_integer():
+                            item.description = f"{int(group['refill']['currentNumberOfPills'])} pills remaining"
                         else:
-                            item.description = f"{medication['pillsLeft']} pills remaining"
+                            item.description = f"{group['refill']['currentNumberOfPills']} pills remaining"
                         todo_list.append(item)
 
         return todo_list

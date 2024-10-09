@@ -33,31 +33,35 @@ class MedisafeApiClient:
         self._username = username
         self._password = password
         self._session = session
+        self._auth = None
 
     async def async_get_data(self) -> dict:
-        auth = await self.api_wrapper(
-            "post",
-            "https://web.medisafe.com/api/auth",
-            {"username": self._username, "password": self._password},
-        )
-        if "error" in auth:
-            if "message" in auth["error"]:
-                _LOGGER.error(f"Authentication failed: {auth['error']['message']}")
-                raise ConfigEntryAuthFailed(auth["error"]["message"])
-            else:
-                _LOGGER.error(f"Authentication failed: {auth['error']}")
-                raise ConfigEntryAuthFailed(auth["error"])
+        if self._auth is None:
+            auth = await self.api_wrapper(
+                "post",
+                "https://web.medisafe.com/api/auth",
+                {"username": self._username, "password": self._password},
+            )
+            if "error" in auth:
+                if "message" in auth["error"]:
+                    _LOGGER.error(f"Authentication failed: {auth['error']['message']}")
+                    raise ConfigEntryAuthFailed(auth["error"]["message"])
+                else:
+                    _LOGGER.error(f"Authentication failed: {auth['error']}")
+                    raise ConfigEntryAuthFailed(auth["error"])
 
-        if "token" not in auth:
-            _LOGGER.error(f"No token recieved")
-            raise ConfigEntryAuthFailed("Authentication Failed")
+            if "token" not in auth:
+                _LOGGER.error("No token recieved")
+                raise ConfigEntryAuthFailed("Authentication Failed")
+
+            self._auth = auth
 
         start = int((datetime.today() - timedelta(days=1)).timestamp() * 1000)
         end = int((datetime.today() + timedelta(days=1)).timestamp() * 1000)
         return await self.api_wrapper(
             "get",
-            f"https://web.medisafe.com/api/sync/{start}/{end}?id={auth['id']}",
-            headers={"Authorization": "Bearer " + auth["token"]},
+            f"https://web.medisafe.com/api/sync/{start}/{end}?id={self._auth['id']}",
+            headers={"Authorization": "Bearer " + self._auth["token"]},
         )
 
     async def api_wrapper(

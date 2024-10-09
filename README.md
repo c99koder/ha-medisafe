@@ -76,6 +76,8 @@ filter:
         integration: medisafe
   exclude:
     - entity_id: sensor.medication_*
+    - entity_id: calendar.*
+    - entity_id: todo.*
 sort:
   method: state
   numeric: true

@@ -12,8 +12,6 @@
 #  limitations under the License.
 import logging
 
-from datetime import date
-
 from homeassistant.components.todo import TodoListEntity, TodoItem, TodoItemStatus
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 

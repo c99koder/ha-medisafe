@@ -92,6 +92,19 @@ class MedisafeDataUpdateCoordinator(DataUpdateCoordinator):
 
         return None
 
+    def get_doctor(self, uuid):
+        if "doctors" not in self.data:
+            _LOGGER.error("Medisafe has no data yet")
+            return None
+        else:
+            for doctor in self.data["doctors"]:
+                if doctor["id"] == uuid:
+                    return doctor
+
+        _LOGGER.error(f"Doctor not found for UUID: {uuid}")
+
+        return None
+
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""

@@ -20,7 +20,7 @@ ATTRIBUTION = "Data provided by https://medisafe.com/"
 ISSUE_URL = "https://github.com/c99koder/ha-medisafe/issues"
 
 # Platforms
-PLATFORMS = ["sensor", "todo"]
+PLATFORMS = ["sensor", "todo", "calendar"]
 
 # Configuration and options
 CONF_USERNAME = "username"

@@ -14,7 +14,7 @@ import logging
 
 from datetime import date
 
-from homeassistant.components.sensor import SensorStateClass
+from homeassistant.components.sensor import SensorStateClass, SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import ATTRIBUTION
@@ -50,9 +50,9 @@ async def async_setup_entry(hass, entry, async_add_devices):
     async_add_devices(entities)
 
 
-class MedisafeStatusCountEntity(CoordinatorEntity):
+class MedisafeStatusCountEntity(CoordinatorEntity, SensorEntity):
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_unit_of_measurement = "doses"
+    _attr_native_unit_of_measurement = "doses"
     _attr_icon = "mdi:pill"
     _attr_suggested_display_precision = 0
     _attr_has_entity_name = True
@@ -91,9 +91,9 @@ class MedisafeStatusCountEntity(CoordinatorEntity):
         }
 
 
-class MedisafeMedicationEntity(CoordinatorEntity):
+class MedisafeMedicationEntity(CoordinatorEntity, SensorEntity):
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_unit_of_measurement = "pills"
+    _attr_native_unit_of_measurement = "pills"
     _attr_icon = "mdi:pill"
     _attr_suggested_display_precision = 0
     _attr_has_entity_name = True

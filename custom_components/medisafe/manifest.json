@@ -12,5 +12,5 @@
   ],
   "iot_class": "cloud_polling",
   "requirements": [],
-  "version": "0.0.4"
+  "version": "0.1.0"
 }

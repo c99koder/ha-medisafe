@@ -10,3 +10,5 @@ logger:
   default: info
   logs:
     custom_components.medisafe: debug
+
+debugpy:

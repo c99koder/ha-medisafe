@@ -1,4 +1,4 @@
-#  Copyright (C) 2022 Sam Steele
+#  Copyright (C) 2024 Sam Steele
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -10,14 +10,13 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-import asyncio
 import logging
 from datetime import timedelta
+from dataclasses import dataclass
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -45,37 +44,30 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
 
-    username = entry.data.get(CONF_USERNAME)
-    password = entry.data.get(CONF_PASSWORD)
+    coordinator = MedisafeDataUpdateCoordinator(hass)
 
-    session = async_get_clientsession(hass)
-    client = MedisafeApiClient(username, password, session)
+    entry.runtime_data = MedisafeData(
+        client=MedisafeApiClient(
+            username=entry.data[CONF_USERNAME],
+            password=entry.data[CONF_PASSWORD],
+            session=async_get_clientsession(hass),
+        ),
+        coordinator=coordinator,
+    )
 
-    coordinator = MedisafeDataUpdateCoordinator(hass, client=client)
-    await coordinator.async_refresh()
+    await coordinator.async_config_entry_first_refresh()
 
-    if not coordinator.last_update_success:
-        raise ConfigEntryNotReady
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
-    hass.data[DOMAIN][entry.entry_id] = coordinator
-
-    for platform in PLATFORMS:
-        if entry.options.get(platform, True):
-            coordinator.platforms.append(platform)
-            hass.async_add_job(
-                hass.config_entries.async_forward_entry_setup(entry, platform)
-            )
-
-    entry.add_update_listener(async_reload_entry)
     return True
 
 
 class MedisafeDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(self, hass: HomeAssistant, client: MedisafeApiClient) -> None:
+    def __init__(self, hass: HomeAssistant) -> None:
         """Initialize."""
-        self.api = client
         self.platforms = []
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
@@ -83,30 +75,39 @@ class MedisafeDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            return await self.api.async_get_data()
+            return await self.config_entry.runtime_data.client.async_get_data()
         except Exception as exception:
             raise UpdateFailed() from exception
+
+    def get_medication(self, uuid):
+        if "medications" not in self.data:
+            _LOGGER.error("Medisafe has no data yet")
+            return None
+
+        if "medications" in self.data:
+            for medication in self.data["medications"]:
+                if medication["uuid"] == uuid:
+                    return medication
+
+        _LOGGER.error(f"Medication not found for UUID: {uuid}")
+
+        return None
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
-        )
-    )
-    if unloaded:
-        hass.data[DOMAIN].pop(entry.entry_id)
-
-    return unloaded
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
+
+
+@dataclass
+class MedisafeData:
+    """Data for the Medisafe integration."""
+
+    client: MedisafeApiClient
+    coordinator: MedisafeDataUpdateCoordinator

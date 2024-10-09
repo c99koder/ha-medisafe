@@ -1,4 +1,4 @@
-#  Copyright (C) 2022 Sam Steele
+#  Copyright (C) 2024 Sam Steele
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -14,7 +14,7 @@
 NAME = "Medisafe"
 DOMAIN = "medisafe"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.0.2"
+VERSION = "0.0.4"
 
 ATTRIBUTION = "Data provided by https://medisafe.com/"
 ISSUE_URL = "https://github.com/c99koder/ha-medisafe/issues"

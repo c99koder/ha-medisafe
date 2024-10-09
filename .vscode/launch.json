@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "/usr/local/bin/hass",
+      "command": "${workspaceFolder}/scripts/develop",
       "name": "Run Home Assistant",
       "request": "launch",
       "type": "node-terminal"

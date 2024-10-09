@@ -3,10 +3,14 @@
   "name": "Medisafe",
   "documentation": "https://github.com/c99koder/ha-medisafe",
   "issue_tracker": "https://github.com/c99koder/ha-medisafe/issues",
-  "dependencies": ["http"],
+  "dependencies": [
+    "http"
+  ],
   "config_flow": true,
-  "codeowners": ["@c99koder"],
+  "codeowners": [
+    "@c99koder"
+  ],
   "iot_class": "cloud_polling",
   "requirements": [],
-  "version": "0.0.3"
+  "version": "0.0.4"
 }

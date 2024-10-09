@@ -16,6 +16,8 @@ import socket
 from datetime import datetime
 from datetime import timedelta
 
+from homeassistant.exceptions import ConfigEntryAuthFailed
+
 import aiohttp
 import async_timeout
 
@@ -39,10 +41,16 @@ class MedisafeApiClient:
             {"username": self._username, "password": self._password},
         )
         if "error" in auth:
-            raise Exception(auth["error"]["message"])
+            if "message" in auth["error"]:
+                _LOGGER.error(f"Authentication failed: {auth['error']['message']}")
+                raise ConfigEntryAuthFailed(auth["error"]["message"])
+            else:
+                _LOGGER.error(f"Authentication failed: {auth['error']}")
+                raise ConfigEntryAuthFailed(auth["error"])
 
         if "token" not in auth:
-            raise Exception("Authentication Failed")
+            _LOGGER.error(f"No token recieved")
+            raise ConfigEntryAuthFailed("Authentication Failed")
 
         start = int((datetime.today() - timedelta(days=1)).timestamp() * 1000)
         end = int((datetime.today() + timedelta(days=1)).timestamp() * 1000)

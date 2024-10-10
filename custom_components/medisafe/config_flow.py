@@ -10,6 +10,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
@@ -18,6 +19,8 @@ from .api import MedisafeApiClient
 from .const import CONF_PASSWORD
 from .const import CONF_USERNAME
 from .const import DOMAIN
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 class MedisafeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -31,26 +34,40 @@ class MedisafeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._errors = {}
 
     async def async_step_user(self, user_input=None):
-        """Handle a flow initialized by the user."""
         self._errors = {}
-
-        # Uncomment the next 2 lines if only a single instance of the integration is allowed:
-        # if self._async_current_entries():
-        #     return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
             valid = await self._test_credentials(
                 user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
             )
             if valid:
-                return self.async_create_entry(
-                    title=user_input[CONF_USERNAME], data=user_input
-                )
+                if (
+                    self.source == config_entries.SOURCE_RECONFIGURE
+                    or self.source == config_entries.SOURCE_REAUTH
+                ):
+                    return self.async_update_reload_and_abort(
+                        self.hass.config_entries.async_get_entry(
+                            self.context["entry_id"]
+                        ),
+                        data=user_input,
+                    )
+                else:
+                    return self.async_create_entry(
+                        title=user_input[CONF_USERNAME], data=user_input
+                    )
             else:
                 self._errors["base"] = "auth"
 
             return await self._show_config_form(user_input)
 
+        return await self._show_config_form(user_input)
+
+    async def async_step_reconfigure(self, user_input=None):
+        self._errors = {}
+        return await self._show_config_form(user_input)
+
+    async def async_step_reauth(self, user_input=None):
+        self._errors = {}
         return await self._show_config_form(user_input)
 
     async def _show_config_form(self, user_input):  # pylint: disable=unused-argument
@@ -66,8 +83,9 @@ class MedisafeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _test_credentials(self, username, password):
         """Return true if credentials is valid."""
         try:
-            session = async_create_clientsession(self.hass)
-            client = MedisafeApiClient(username, password, session)
+            client = MedisafeApiClient(
+                username, password, async_create_clientsession(self.hass)
+            )
             await client.async_get_data()
             return True
         except Exception:  # pylint: disable=broad-except

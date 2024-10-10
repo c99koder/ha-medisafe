@@ -11,6 +11,10 @@
     },
     "error": {
       "auth": "Username/Password is wrong."
+    },
+    "abort": {
+      "reauth_successful": "Configuration was updated successfully",
+      "reconfigure_successful": "Configuration was updated successfully"
     }
   }
 }

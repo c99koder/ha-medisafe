@@ -40,6 +40,7 @@ class MedisafeApiClient:
             {"username": self._username, "password": self._password},
         )
         if "error" in auth:
+            print(auth)
             if "message" in auth["error"]:
                 _LOGGER.error(f"Authentication failed: {auth['error']['message']}")
                 raise ConfigEntryAuthFailed(auth["error"]["message"])

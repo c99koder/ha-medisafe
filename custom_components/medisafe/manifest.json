@@ -1,12 +1,12 @@
 {
   "domain": "medisafe",
   "name": "Medisafe",
-  "documentation": "https://github.com/c99koder/ha-medisafe",
-  "issue_tracker": "https://github.com/c99koder/ha-medisafe/issues",
-  "dependencies": ["http"],
-  "config_flow": true,
   "codeowners": ["@c99koder"],
+  "config_flow": true,
+  "dependencies": ["http"],
+  "documentation": "https://github.com/c99koder/ha-medisafe",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/c99koder/ha-medisafe/issues",
   "requirements": [],
   "version": "0.1.1"
 }

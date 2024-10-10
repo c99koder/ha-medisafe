@@ -11,8 +11,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import logging
-from datetime import timedelta
 from dataclasses import dataclass
+from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config

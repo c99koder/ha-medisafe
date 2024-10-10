@@ -12,7 +12,9 @@
 #  limitations under the License.
 import logging
 
-from homeassistant.components.todo import TodoListEntity, TodoItem, TodoItemStatus
+from homeassistant.components.todo import TodoItem
+from homeassistant.components.todo import TodoItemStatus
+from homeassistant.components.todo import TodoListEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import ATTRIBUTION
@@ -44,8 +46,16 @@ class MedisafeTodoListEntity(CoordinatorEntity, TodoListEntity):
 
         if self.coordinator.data is not None and "groups" in self.coordinator.data:
             for group in self.coordinator.data["groups"]:
-                if "refill" in group and "refillReminder" in group["refill"] and "status" in group:
-                    if group["status"] == "ACTIVE" and group["refill"]["currentNumberOfPills"] <= group["refill"]["refillReminder"]["pills"]:
+                if (
+                    "refill" in group
+                    and "refillReminder" in group["refill"]
+                    and "status" in group
+                ):
+                    if (
+                        group["status"] == "ACTIVE"
+                        and group["refill"]["currentNumberOfPills"]
+                        <= group["refill"]["refillReminder"]["pills"]
+                    ):
                         item = TodoItem()
                         item.summary = group["medicine"]["name"]
                         item.uid = group["uuid"]

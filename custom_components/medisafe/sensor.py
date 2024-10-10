@@ -11,10 +11,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import logging
-
 from datetime import date
 
-from homeassistant.components.sensor import SensorStateClass, SensorEntity
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorStateClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import ATTRIBUTION
@@ -34,12 +34,20 @@ async def async_setup_entry(hass, entry, async_add_devices):
         _LOGGER.info(f"Got {len(coordinator.data['groups'])} medications")
         for ent in coordinator.data["groups"]:
             if "refill" not in ent or "currentNumberOfPills" not in ent["refill"]:
-                _LOGGER.debug(f"Missing currentNumberOfPills: {ent['medicine']['name']} with UUID {ent['uuid']}")
+                _LOGGER.debug(
+                    f"Missing currentNumberOfPills: {ent['medicine']['name']} with UUID {ent['uuid']}"
+                )
             elif ent["status"] != "ACTIVE":
-                _LOGGER.debug(f"Inactive medication: {ent['medicine']['name']} with UUID {ent['uuid']}")
+                _LOGGER.debug(
+                    f"Inactive medication: {ent['medicine']['name']} with UUID {ent['uuid']}"
+                )
             else:
-                _LOGGER.debug(f"Adding: {ent['medicine']['name']} with UUID {ent['uuid']}")
-                entities.append(MedisafeMedicationEntity(coordinator, entry, ent["uuid"]))
+                _LOGGER.debug(
+                    f"Adding: {ent['medicine']['name']} with UUID {ent['uuid']}"
+                )
+                entities.append(
+                    MedisafeMedicationEntity(coordinator, entry, ent["uuid"])
+                )
 
     entities.append(MedisafeStatusCountEntity(coordinator, entry, "taken"))
     entities.append(MedisafeStatusCountEntity(coordinator, entry, "missed"))
@@ -121,7 +129,7 @@ class MedisafeMedicationEntity(CoordinatorEntity, SensorEntity):
     def available(self):
         medication = self.coordinator.get_medication(self.uuid)
 
-        return (medication is not None and "pillsLeft" in medication)
+        return medication is not None and "pillsLeft" in medication
 
     @property
     def extra_state_attributes(self):

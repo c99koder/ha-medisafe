@@ -11,11 +11,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import logging
+from datetime import datetime
+from datetime import timedelta
+
 import pytz
-
-from datetime import datetime, timedelta
-
-from homeassistant.components.calendar import CalendarEntity, CalendarEvent
+from homeassistant.components.calendar import CalendarEntity
+from homeassistant.components.calendar import CalendarEvent
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import ATTRIBUTION
@@ -44,7 +45,9 @@ class MedisafeCalendarEntity(CoordinatorEntity, CalendarEntity):
     def event_from_appointment(self, appointment):
         dt = datetime.utcfromtimestamp(appointment["date"]).replace(tzinfo=pytz.utc)
         doctor = self.coordinator.get_doctor(appointment["doctorId"])
-        event = CalendarEvent(start=dt, end=dt + timedelta(hours=1), summary=appointment["title"])
+        event = CalendarEvent(
+            start=dt, end=dt + timedelta(hours=1), summary=appointment["title"]
+        )
         description = ""
         if appointment["notes"]:
             description += appointment["notes"] + "\n\n"
@@ -85,10 +88,18 @@ class MedisafeCalendarEntity(CoordinatorEntity, CalendarEntity):
     def event(self):
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
 
-        if self.coordinator.data is not None and "appointments" in self.coordinator.data:
+        if (
+            self.coordinator.data is not None
+            and "appointments" in self.coordinator.data
+        ):
             for appointment in reversed(self.coordinator.data["appointments"]):
                 if appointment["active"] is True:
-                    if datetime.utcfromtimestamp(appointment["date"]).replace(tzinfo=pytz.utc) >= now:
+                    if (
+                        datetime.utcfromtimestamp(appointment["date"]).replace(
+                            tzinfo=pytz.utc
+                        )
+                        >= now
+                    ):
                         return self.event_from_appointment(appointment)
 
         return None
@@ -96,10 +107,15 @@ class MedisafeCalendarEntity(CoordinatorEntity, CalendarEntity):
     async def async_get_events(self, hass, start_date, end_date) -> list[CalendarEvent]:
         events = []
 
-        if self.coordinator.data is not None and "appointments" in self.coordinator.data:
+        if (
+            self.coordinator.data is not None
+            and "appointments" in self.coordinator.data
+        ):
             for appointment in self.coordinator.data["appointments"]:
                 if appointment["active"] is True:
-                    dt = datetime.utcfromtimestamp(appointment["date"]).replace(tzinfo=pytz.utc)
+                    dt = datetime.utcfromtimestamp(appointment["date"]).replace(
+                        tzinfo=pytz.utc
+                    )
                     if dt >= start_date and dt <= end_date:
                         events.append(self.event_from_appointment(appointment))
 

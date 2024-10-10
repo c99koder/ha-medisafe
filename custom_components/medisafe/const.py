@@ -14,7 +14,7 @@
 NAME = "Medisafe"
 DOMAIN = "medisafe"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 ATTRIBUTION = "Data provided by https://medisafe.com/"
 ISSUE_URL = "https://github.com/c99koder/ha-medisafe/issues"

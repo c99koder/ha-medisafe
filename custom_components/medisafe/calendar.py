@@ -52,31 +52,31 @@ class MedisafeCalendarEntity(CoordinatorEntity, CalendarEntity):
         if doctor is not None:
             description += "Doctor:\n"
             description += doctor["firstName"] + " " + doctor["lastName"]
-            if doctor["speciality"]:
+            if "speciality" in doctor and doctor["speciality"]:
                 description += " (" + doctor["speciality"] + ")"
             description += "\n"
 
-            if doctor["email"]:
+            if "email" in doctor and doctor["email"]:
                 description += "Email: " + doctor["email"] + "\n"
 
-            if doctor["address"]:
+            if "address" in doctor and doctor["address"]:
                 description += "Address: " + doctor["address"] + "\n"
 
-            if doctor["phone1"] and doctor["phone1Type"]:
+            if "phone1" in doctor and doctor["phone1"] and doctor["phone1Type"]:
                 description += doctor["phone1Type"] + ": " + doctor["phone1"] + "\n"
 
-            if doctor["phone2"] and doctor["phone2Type"]:
+            if "phone2" in doctor and doctor["phone2"] and doctor["phone2Type"]:
                 description += doctor["phone2Type"] + ": " + doctor["phone2"] + "\n"
 
-            if doctor["phone3"] and doctor["phone3Type"]:
+            if "phone3" in doctor and doctor["phone3"] and doctor["phone3Type"]:
                 description += doctor["phone3Type"] + ": " + doctor["phone3"] + "\n"
 
             description += "\n"
 
         event.description = description
-        if appointment["address"]:
+        if "address" in appointment and appointment["address"]:
             event.location = appointment["address"]
-        elif doctor is not None and doctor["address"]:
+        elif doctor is not None and "address" in doctor and doctor["address"]:
             event.location = doctor["address"]
         event.uid = appointment["id"]
         return event

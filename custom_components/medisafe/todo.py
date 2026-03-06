@@ -49,6 +49,8 @@ class MedisafeTodoListEntity(CoordinatorEntity, TodoListEntity):
                 if (
                     "refill" in group
                     and "refillReminder" in group["refill"]
+                    and group["refill"]["refillReminder"] is not None
+                    and "pills" in group["refill"]["refillReminder"]
                     and "status" in group
                 ):
                     if (

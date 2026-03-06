@@ -18,7 +18,7 @@ from datetime import timedelta
 
 import aiohttp
 import async_timeout
-from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.exceptions import ConfigEntryAuthFailed, PlatformNotReady
 
 TIMEOUT = 120
 
@@ -40,17 +40,18 @@ class MedisafeApiClient:
             {"username": self._username, "password": self._password},
         )
         if "error" in auth:
-            print(auth)
             if "message" in auth["error"]:
                 _LOGGER.error(f"Authentication failed: {auth['error']['message']}")
-                raise ConfigEntryAuthFailed(auth["error"]["message"])
+                raise PlatformNotReady(auth["error"]["message"])
+            elif auth["error"] == "Unauthorized":
+                raise ConfigEntryAuthFailed(auth["error"])
             else:
                 _LOGGER.error(f"Authentication failed: {auth['error']}")
-                raise ConfigEntryAuthFailed(auth["error"])
+                raise PlatformNotReady(auth["error"])
 
         if "token" not in auth:
             _LOGGER.error("No token recieved")
-            raise ConfigEntryAuthFailed("Authentication Failed")
+            raise PlatformNotReady("Authentication Failed")
 
         start = int((datetime.today() - timedelta(days=1)).timestamp() * 1000)
         end = int((datetime.today() + timedelta(days=1)).timestamp() * 1000)
